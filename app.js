@@ -1,13 +1,11 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const app = express();
+require('dotenv').config();
+app.use(express.json());
 
-require('dotenv').config()
+const port = process.env.PORT || 5000;
 
-app.use(express.json())
+const bookRouter = require('./routes/todoRoutes');
+app.use("/api/todo", bookRouter);
 
-
-const bookRouter = require('./routes/todoRoutes')
-
-app.use("/api/todo", bookRouter)
-
-app.listen(process.env.PORT, () => console.log("Server is running on port 5000"))
+app.listen(port, () => console.log(`Server is running on port ${port}`));
