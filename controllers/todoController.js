@@ -15,25 +15,31 @@ const todoControllers = {
         try {
             const { title, description } = req.body
 
-            const sql = 'INSERT INTO todo(title, description) VALUES($1, $2) RETURNING *'
+            const sql = 'INSERT INTO todo(title, description) VALUES($1, $2) RETURNING *';
 
             const { rows } = await postgre.query(sql, [title, description])
 
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
-            res.json({ msg: error.message });
+            res.status(500).json({ error: error.message });
         }
     },
+
+
     updateTodo: async(req, res) => {
         try {
-            const { title, description } = req.body
-
+            const { title, description } = req.body;
+     
             const sql = 'UPDATE todo set title = $1, description = $2 where id = $3 RETURNING *'
 
             const { rows } = await postgre.query(sql, [title, description, req.params.id])
 
-            res.json({msg: "OK", data: rows[0]})
+            if (rows.length === 0) {
+                return res.status(404).json({ error: 'Todo not found' });
+              }
+
+              res.status(500).json({ error: error.message });
 
         } catch (error) {
             res.json({ msg: error.message });
@@ -59,5 +65,6 @@ const todoControllers = {
         }
     }
 }
+
 
 module.exports = todoControllers
