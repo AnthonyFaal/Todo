@@ -27,24 +27,25 @@ const todoControllers = {
     },
 
 
-    updateTodo: async(req, res) => {
+    updateTodo: async (req, res) => {
         try {
-            const { title, description } = req.body;
-     
-            const sql = 'UPDATE todo set title = $1, description = $2 where id = $3 RETURNING *'
-
-            const { rows } = await postgre.query(sql, [title, description, req.params.id])
-
-            if (rows.length === 0) {
-                return res.status(404).json({ error: 'Todo not found' });
-              }
-
-              res.status(500).json({ error: error.message });
-
+          const { title, description } = req.body;
+          const todoId = req.params.id;
+           
+          const sql = 'UPDATE todo SET title = $1, description = $2 WHERE id = $3 RETURNING *';
+      
+          const { rows } = await postgre.query(sql, [title, description, todoId]);
+      
+          if (rows.length === 0) {
+            return res.status(404).json({ error: 'Todo not found' });
+          }
+      
+          res.json({ msg: 'Todo updated successfully', data: rows[0] });
         } catch (error) {
-            res.json({ msg: error.message });
+          res.status(500).json({ error: error.message });
         }
-    },
+      },
+      
 
     //Delete todo
     deleteTodo: async(req, res) => {
