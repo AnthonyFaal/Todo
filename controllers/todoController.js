@@ -1,4 +1,4 @@
-const db = require('../config/dbConfig');
+const postgre = require('../config/dbConfig');
 
 
 const todoControllers = {
@@ -7,7 +7,7 @@ const todoControllers = {
             const { rows } = await postgre.query("select * from todo")
             res.json({msg: "OK", data: rows})
         } catch (error) {
-            res.json({msg: error.msg})
+            res.json({ msg: error.message });
         }
     },
    
@@ -22,7 +22,7 @@ const todoControllers = {
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
-            res.json({msg: error.msg})
+            res.json({ msg: error.message });
         }
     },
     updateTodo: async(req, res) => {
@@ -36,7 +36,7 @@ const todoControllers = {
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
-            res.json({msg: error.msg})
+            res.json({ msg: error.message });
         }
     },
 
@@ -55,7 +55,7 @@ const todoControllers = {
             
 
         } catch (error) {
-            res.json({msg: error.msg})
+            res.json({ msg: error.message });
         }
     }
 }
